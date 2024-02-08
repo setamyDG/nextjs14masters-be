@@ -1,0 +1,40 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "sqlite"
+  url      = env("DATABASE_URL")
+}
+
+//tabela product
+model Product {
+  id          String @id @default(cuid())
+  name        String
+  slug        String
+  description String
+  price       Int
+  image       String
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  reviews Review[]
+}
+
+//przyklad, jak dodac relacje do tabeli (w kursie są inne tabele to zrobienia)
+model Review {
+  id          String @id @default(cuid())
+  title       String
+  description String
+  rating      Int
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  product   Product @relation(fields: [productId], references: [id])
+  productId String
+}
